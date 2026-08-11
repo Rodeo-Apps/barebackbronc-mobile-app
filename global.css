@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@import "uniwind";
+
+/* Palette read from the shipped barebackbronc.pro stylesheet, so the app
+   matches the site a user just came from. */
+@theme {
+  --color-background: #0d0708;
+  --color-surface: #160d0f;
+  --color-card: #1d1214;
+  --color-border: #331f22;
+  --color-text: #e6d3d3;
+  --color-muted: #a89596;
+  --color-accent: #cc2936;
+  --color-accentAlt: #e8a0a5;
+  --color-cream: #f2e9e7;
+  --color-success: #4ba36b;
+  --color-warning: #d99a2b;
+  --color-danger: #c8503f;
+}
