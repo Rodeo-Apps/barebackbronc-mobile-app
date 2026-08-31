@@ -12,3 +12,4 @@ export { ProfileScreen } from './Profile';
 export { ResultsScreen } from './Results';
 export { WaiverScreen } from './Waiver';
 export { NoticesScreen } from './Notices';
+export { RulesScreen } from './Rules';
