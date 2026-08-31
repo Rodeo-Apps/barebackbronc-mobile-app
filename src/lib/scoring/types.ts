@@ -127,6 +127,29 @@ export function requireNumber(profile: RulesProfile, key: string): number {
   return value;
 }
 
+/**
+ * For booleans where guessing is worse than failing.
+ *
+ * The same argument as `requireNumber`, and it matters more here than it looks:
+ * a missing number produces a wrong time, which somebody notices, while a
+ * missing boolean produces a no-time on a run that was clean, which reads as a
+ * judge's call and gets argued with the wrong person.
+ *
+ * Reach for this when the key decides whether a run counts at all AND the
+ * associations genuinely disagree about it. Where every association does the
+ * same thing, `profileBool` with a documented default is right.
+ */
+export function requireBool(profile: RulesProfile, key: string): boolean {
+  const value = profile.values[key];
+  if (typeof value !== 'boolean') {
+    throw new Error(
+      `Rules profile "${profile.edition}" is missing required rule "${key}". ` +
+        'Refusing to score rather than guess.',
+    );
+  }
+  return value;
+}
+
 /** Formats milliseconds the way a rodeo posts a time: 13.42, not 13.417. */
 export function formatTime(ms: number): string {
   return (Math.round(ms / 10) / 100).toFixed(2);
