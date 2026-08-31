@@ -9,3 +9,6 @@ export { ForgotPasswordScreen } from './ForgotPassword';
 export { RodeoDetailScreen } from './RodeoDetail';
 export { AnalyzeScreen } from './Analyze';
 export { ProfileScreen } from './Profile';
+export { ResultsScreen } from './Results';
+export { WaiverScreen } from './Waiver';
+export { NoticesScreen } from './Notices';
