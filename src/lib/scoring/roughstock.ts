@@ -106,7 +106,44 @@ export function scoreRoughstockRide(input: RoughstockInput): RunOutcome {
     assertInRange(judge.animal, maxPerComponent, `judge ${judge.judgeId} animal`);
   }
 
-  const officialScore = input.judgeScores.reduce((sum, j) => sum + j.rider + j.animal, 0);
+  const rawTotal = input.judgeScores.reduce((sum, j) => sum + j.rider + j.animal, 0);
+
+  /*
+   * The divisor is the difference between a two-judge event and a four-judge
+   * one, and leaving it out is the defect the database already had and fixed.
+   *
+   * PRCA runs two judges marking 0-25 on each side and the four marks sum
+   * straight to 100, so the divisor is 1. PBR moved to FOUR judges for 2026 --
+   * eight marks, combined and divided by two. Summing those without dividing
+   * records a 90-point ride as 180.
+   *
+   * That exact mistake was seeded into `scoring_configs` and corrected in
+   * migration 0012 (SPEC-DELTAS D21), which added `score_divisor` to every
+   * judged config. The engine never read it, so the rule data was right and
+   * the code that consumes it was still wrong -- which is worse than both
+   * being wrong, because the config looks like it is in force.
+   *
+   * Defaulting to 1 is safe here: it is what every association this app ships
+   * for actually uses, and a profile that needs otherwise now says so.
+   */
+  const divisor = profileNumber(p, 'score_divisor', 1);
+  if (!Number.isFinite(divisor) || divisor <= 0) {
+    throw new Error(
+      `Rules profile "${p.edition}" has a score_divisor of ${divisor}, which cannot be used to score a ride.`,
+    );
+  }
+
+  const officialScore = rawTotal / divisor;
+
+  const maxScore = profileNumber(p, 'max_score', 100);
+  if (officialScore > maxScore) {
+    // Reached only if the judge count, the component maximum and the divisor
+    // disagree with each other. Refusing beats posting an impossible score.
+    throw new Error(
+      `A card of ${rawTotal} over ${judgeCount} judges divided by ${divisor} gives ` +
+        `${officialScore}, above the ${maxScore} maximum for "${p.edition}". Refusing to score.`,
+    );
+  }
 
   if (input.reride?.offered && input.reride.accepted === null) {
     return {

@@ -144,3 +144,29 @@ test('a partial judge card is refused rather than scored', () => {
     /Refusing to score a partial card/,
   );
 });
+
+test('a four-judge card is divided, not summed', () => {
+  // PBR moved to four judges for 2026: eight marks, combined and divided by
+  // two. Summing them records a 90-point ride as 180 — the defect migration
+  // 0012 fixed in the database, which this engine then ignored.
+  const fourJudge: RulesProfile = {
+    ...PRCA,
+    edition: 'Four-judge 2026',
+    values: { ...PRCA.values, judge_count: 4, score_divisor: 2 },
+  };
+
+  const outcome = scoreBarebackRide({
+    qualifiedRide: true,
+    markedOut: true,
+    judgeScores: [
+      { judgeId: 'j1', rider: 22, animal: 23 },
+      { judgeId: 'j2', rider: 22, animal: 23 },
+      { judgeId: 'j3', rider: 23, animal: 22 },
+      { judgeId: 'j4', rider: 23, animal: 22 },
+    ],
+    freeArmTouched: false,
+    handOut: false,
+    rulesProfile: fourJudge,
+  });
+  assert.equal(outcome.officialScore, 90);
+});
