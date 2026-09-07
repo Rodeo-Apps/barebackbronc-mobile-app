@@ -22,9 +22,9 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Feed",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" color={color} size={size} />
+            <Ionicons name="newspaper-outline" color={color} size={size} />
           ),
         }}
       />
@@ -38,29 +38,29 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="draw"
-        options={{
-          title: "Draw",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="shuffle-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="compete"
         options={{
-          title: "Rides",
+          title: "Runs",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="stopwatch-outline" color={color} size={size} />
           ),
         }}
       />
       <Tabs.Screen
-        name="body"
+        name="horses"
         options={{
-          title: "Body",
+          title: "Animals",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="fitness-outline" color={color} size={size} />
+            <Ionicons name="paw-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person-outline" color={color} size={size} />
           ),
         }}
       />
