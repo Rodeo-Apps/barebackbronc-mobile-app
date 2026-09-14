@@ -33,6 +33,9 @@ module.exports = {
     plugins: ['expo-router', 'expo-video'],
     experiments: { typedRoutes: true },
     extra: {
+      eas: {
+        projectId: "6dc64b7b-83a5-427a-9213-c18c1e11a87c"
+      },
       domain: "barebackbronc.pro",
       eventType: "bareback",
     },
